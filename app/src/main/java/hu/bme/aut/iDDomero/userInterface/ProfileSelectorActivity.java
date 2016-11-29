@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -88,10 +89,10 @@ public class ProfileSelectorActivity extends AppCompatActivity {
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                ProfileData newProfile = new ProfileData(input.getText().toString());
-                if(validProfile(newProfile)){
-                    newProfile.save();
-                    adapter.addItem(newProfile);
+                ProfileData newProfileItem = new ProfileData(input.getText().toString());
+                if(validProfile(newProfileItem)){
+                    newProfileItem.save();
+                    adapter.addItem(newProfileItem);
                 };
 
             }
@@ -106,8 +107,17 @@ public class ProfileSelectorActivity extends AppCompatActivity {
         builder.show();
     }
 
-    private boolean validProfile(ProfileData newProfile) {
-        //Todo: validation
+    private boolean validProfile(ProfileData newProfileItem) {
+        if(newProfileItem.name.equals("")){
+            Toast.makeText(getApplicationContext(),"Username must be at least one character long", Toast.LENGTH_LONG).show();
+            return false;
+        }
+
+        if(adapter.contains(newProfileItem)){
+            Toast.makeText(getApplicationContext(),"Username is already taken", Toast.LENGTH_LONG).show();
+            return false;
+        }
+
         return true;
     }
 

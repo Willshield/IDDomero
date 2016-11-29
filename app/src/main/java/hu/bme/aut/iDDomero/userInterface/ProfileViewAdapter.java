@@ -61,6 +61,16 @@ public class ProfileViewAdapter extends RecyclerView.Adapter<ProfileViewAdapter.
         });
     }
 
+    public boolean contains(ProfileData item){
+        boolean contains = false;
+        for (int i = 0; i < items.size(); i++){
+            if(items.get(i).name.equals(item.name)){
+                contains = true;
+            }
+        }
+        return contains;
+    }
+
     public void addItem(ProfileData item) {
         items.add(item);
         notifyItemInserted(items.size() - 1);
