@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="hu.bme.aut.iDDomero.userInterface.SensorStopWatchActivity"
+    android:layout_gravity="center"
+    android:background="@color/colorBackground">
+
+
+    <include layout="@layout/title_bar"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:layout_gravity="center">
+
+
+        <TextView
+            android:gravity="center"
+            android:id="@+id/timer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="24dp"
+            android:text="@string/start_time"
+            android:textColor="#0c0c0c"
+            android:textSize="40sp" />
+
+
+        <TextView
+            android:gravity="center"
+            android:id="@+id/textmaxmin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            android:text="" />
+
+        <Button
+            android:layout_gravity="center"
+            android:id="@+id/startbutton"
+            android:layout_width="134dp"
+            android:layout_height="wrap_content"
+            android:textSize="32sp"
+            android:text="@string/start"
+            android:paddingBottom="@dimen/button_margin"
+            android:paddingLeft="@dimen/button_margin"
+            android:paddingRight="@dimen/button_margin"
+            android:paddingTop="@dimen/button_margin"
+            android:background="@color/colorForeground"/>
+
+    </LinearLayout>
+
+</LinearLayout>
