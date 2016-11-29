@@ -39,4 +39,10 @@
     <string name="select">Select</string>
     <string name="new_profile">New profile</string>
     <string name="selected">Selected</string>
+    <string name="one_user_alert">There must be at least one user</string>
+    <string name="username_taken">Username is already taken</string>
+    <string name="null_username_alert">Username must be at least one character long</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
+    <string name="long_username_alert">Username is maximum 30 characters long</string>
 </resources>

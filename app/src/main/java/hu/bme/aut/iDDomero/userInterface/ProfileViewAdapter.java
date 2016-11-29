@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +29,10 @@ public class ProfileViewAdapter extends RecyclerView.Adapter<ProfileViewAdapter.
 
     @Override
     public ProfileViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        if(items.size() == 0){
+            addItem(new ProfileData(context.getResources().getString(R.string.anonymous)));
+            SettingsData.getInstance(context).setActivePlayer(items.get(0).name);
+        }
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_profile, parent, false);
         return new ProfileViewHolder(itemView);
     }
@@ -56,7 +61,19 @@ public class ProfileViewAdapter extends RecyclerView.Adapter<ProfileViewAdapter.
         holder.removeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                removeItem(holder.getAdapterPosition());
+                if(items.size() == 1){
+                    Toast.makeText(context, R.string.one_user_alert, Toast.LENGTH_LONG).show();
+                    return;
+                }
+                ProfileData item = items.get(holder.getAdapterPosition());
+                if(item.name.equals(SettingsData.getInstance(context).getActivePlayer())){
+                    removeItem(holder.getAdapterPosition());
+                    SettingsData.getInstance(context).setActivePlayer(items.get(0).name);
+                    notifyItemChanged(0);
+                } else {
+                    removeItem(holder.getAdapterPosition());
+                }
+
             }
         });
     }

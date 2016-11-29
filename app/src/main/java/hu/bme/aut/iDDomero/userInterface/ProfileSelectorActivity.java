@@ -81,23 +81,23 @@ public class ProfileSelectorActivity extends AppCompatActivity {
 
     private void showDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("New profile:");
+        builder.setTitle(R.string.new_profile);
         final EditText input = new EditText(this);
         input.setInputType(InputType.TYPE_CLASS_TEXT);
         builder.setView(input);
 
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 ProfileData newProfileItem = new ProfileData(input.getText().toString());
-                if(validProfile(newProfileItem)){
+                if(isValidProfile(newProfileItem)){
                     newProfileItem.save();
                     adapter.addItem(newProfileItem);
                 };
 
             }
         });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
@@ -107,18 +107,35 @@ public class ProfileSelectorActivity extends AppCompatActivity {
         builder.show();
     }
 
-    private boolean validProfile(ProfileData newProfileItem) {
-        if(newProfileItem.name.equals("")){
-            Toast.makeText(getApplicationContext(),"Username must be at least one character long", Toast.LENGTH_LONG).show();
-            return false;
-        }
-
-        if(adapter.contains(newProfileItem)){
-            Toast.makeText(getApplicationContext(),"Username is already taken", Toast.LENGTH_LONG).show();
-            return false;
-        }
-
+    private boolean isValidProfile(ProfileData newProfileItem) {
+        if (isNullLength(newProfileItem)) return false;
+        if (isAlreadyTakenProfileName(newProfileItem)) return false;
+        if (isTooLong(newProfileItem)) return false;
         return true;
+    }
+
+    private boolean isTooLong(ProfileData newProfileItem) {
+        if(newProfileItem.name.length() >= 30){
+            Toast.makeText(getApplicationContext(), R.string.long_username_alert, Toast.LENGTH_LONG).show();
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isAlreadyTakenProfileName(ProfileData newProfileItem) {
+        if(adapter.contains(newProfileItem)){
+            Toast.makeText(getApplicationContext(), R.string.username_taken, Toast.LENGTH_LONG).show();
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isNullLength(ProfileData newProfileItem) {
+        if(newProfileItem.name.equals("")){
+            Toast.makeText(getApplicationContext(), R.string.null_username_alert, Toast.LENGTH_LONG).show();
+            return true;
+        }
+        return false;
     }
 
 }

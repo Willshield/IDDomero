@@ -4,17 +4,22 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
+    <ScrollView
+        android:layout_width="180dp"
         android:layout_height="wrap_content">
-        <TextView
-            android:id="@+id/profile_name"
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="30sp"
-            android:text="testtext"
-            android:layout_gravity="start"/>
-    </LinearLayout>
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/profile_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="30sp"
+                android:text="testtext"
+                android:layout_gravity="start"/>
+        </LinearLayout>
+    </ScrollView>
+
 
 
     <LinearLayout
