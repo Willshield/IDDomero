@@ -45,6 +45,7 @@ public class ProfileSelectorActivity extends AppCompatActivity {
         loadItemsInBackground();
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
+
     }
 
     private void loadItemsInBackground() {
@@ -57,6 +58,11 @@ public class ProfileSelectorActivity extends AppCompatActivity {
             @Override
             protected void onPostExecute(List<ProfileData> profiles) {
                 super.onPostExecute(profiles);
+                if( profiles.size() == 0 ){
+                    ProfileData newProfileItem = new ProfileData(getResources().getString(R.string.anonymous));
+                    newProfileItem.save();
+                    profiles.add(newProfileItem);
+                }
                 adapter.update(profiles);
             }
         }.execute();
@@ -93,7 +99,7 @@ public class ProfileSelectorActivity extends AppCompatActivity {
                 if(isValidProfile(newProfileItem)){
                     newProfileItem.save();
                     adapter.addItem(newProfileItem);
-                };
+                }
 
             }
         });
