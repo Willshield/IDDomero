@@ -50,25 +50,15 @@ public class HighScoresActivity extends AppCompatActivity {
     }
 
     private void addToListView(List<TimesData> times) {
-        //todo: convert to string, format, add listview
+        //todo: format, sort
+        String[] values = new String[times.size()];
+        for (int i = 0; i < times.size(); i++){
+            values[i] = times.get(i).profile + " " + times.get(i).time;
+        }
 
-    }
-
-    private void initListView() {
-        listView = (ListView) findViewById(R.id.listOfHighScores);
-        String[] values = new String[]{"Android List View",
-                "Adapter implementation",
-                "Simple List View In Android",
-                "Create List View Android",
-                "Android Example",
-                "List View Source Code",
-                "List View Array Adapter",
-                "Android Example List View",
-                "Android Example List View",
-                "Android Example List View"
-        };
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, values);
         listView.setAdapter(adapter);
+
     }
 
     private void setOnClickListeners() {
@@ -87,7 +77,8 @@ public class HighScoresActivity extends AppCompatActivity {
         clearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //todo
+                TimesData.deleteAll(TimesData.class);
+                listView.removeAllViewsInLayout();
             }
         });
     }
@@ -97,8 +88,7 @@ public class HighScoresActivity extends AppCompatActivity {
         Typeface type = Typeface.createFromAsset(getAssets(),"fonts/BubbleMan.ttf");
         title.setTypeface(type);
         clearButton = (Button) findViewById(R.id.clearHighScores);
-
-        initListView();
+        listView = (ListView) findViewById(R.id.listOfHighScores);
     }
 
 

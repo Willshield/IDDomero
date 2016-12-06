@@ -1,6 +1,7 @@
 package hu.bme.aut.iDDomero.userInterface;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -9,6 +10,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -21,6 +23,7 @@ import hu.bme.aut.iDDomero.R;
 import hu.bme.aut.iDDomero.model.SeismicDataPoint;
 import hu.bme.aut.iDDomero.model.SettingsData;
 import hu.bme.aut.iDDomero.model.StopWatchEngine;
+import hu.bme.aut.iDDomero.model.TimesData;
 
 
 public class SensorStopWatchActivity extends AppCompatActivity implements SensorEventListener {
@@ -59,6 +62,7 @@ public class SensorStopWatchActivity extends AppCompatActivity implements Sensor
 
     private String activeProfile;
     private CharSequence bestTimeOfActivePlayer;
+    private int highScoreSaveMode;
 
 
     @Override
@@ -77,6 +81,8 @@ public class SensorStopWatchActivity extends AppCompatActivity implements Sensor
         accuracyFactor = SettingsData.getInstance(getApplicationContext()).getSensitivity();
         drinker.setText(activeProfile + getString(R.string.drinks));
         bestTime.setText(getBestTimeOfActivePlayer());
+        highScoreSaveMode = SettingsData.getInstance(getApplicationContext()).getManageMode();
+        //todo load best zime
     }
 
     private void initSensor() {
@@ -124,7 +130,6 @@ public class SensorStopWatchActivity extends AppCompatActivity implements Sensor
 
     protected void stopMeasure(){
         measureStopped = true;
-        clockRunnung = false;
         startBtn.setText(R.string.action_start);
         stopWatch.stopClock();
         clockRunnung = false;
@@ -187,23 +192,54 @@ public class SensorStopWatchActivity extends AppCompatActivity implements Sensor
     private void checkStopWatchAction(float movement) {
         if (movement > accuracyFactor){
             if (clockRunnung){
-                startTheStopWatch();
-            } else {
                 stopTheStopWatch();
                 handleHighScore();
+            } else {
+                startTheStopWatch();
             }
         }
     }
 
     private void handleHighScore() {
-        //todo: save it if it need to be
+        if (highScoreSaveMode == SettingsData.DONT_SAVE){
+            return;
+        } else if( highScoreSaveMode == SettingsData.AUTOSAVE){
+            saveHighScore();
+        } else {
+            askIfSaveHighScore();
+        }
+        bestTime.setText(getBestTimeOfActivePlayer());
     }
 
-    private void startTheStopWatch() {
-        stopMeasure();
+    private void saveHighScore() {
+        TimesData newHighScore = new TimesData(activeProfile, time.getText().toString());
+        newHighScore.save();
+    }
+
+    private void askIfSaveHighScore() {
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which){
+                    case DialogInterface.BUTTON_POSITIVE:
+                        saveHighScore();
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        break;
+                }
+            }
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(SensorStopWatchActivity.this);
+        builder.setMessage(R.string.save_highscore_question).setPositiveButton(R.string.yes, dialogClickListener).setNegativeButton(R.string.no, dialogClickListener).show();
     }
 
     private void stopTheStopWatch() {
+        stopMeasure();
+    }
+
+    private void startTheStopWatch() {
         stopWatch.startClock();
         startMeasure();
         clockRunnung = true;

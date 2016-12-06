@@ -47,4 +47,7 @@
     <string name="long_username_alert">Username is maximum 30 characters long</string>
     <string name="clear_highScores">Clear highscores</string>
     <string name="drinks">" drinks"</string>
+    <string name="save_highscore_question">Do you want to save your highscore?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>
