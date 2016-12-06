@@ -7,6 +7,7 @@ import java.util.Comparator;
 import java.util.List;*/
 
 import com.orm.SugarRecord;
+import com.orm.query.Condition;
 import com.orm.query.Select;
 
 import java.util.List;
@@ -23,8 +24,15 @@ public class TimesData extends SugarRecord {
         time = t;
     }
 
-    public List<TimesData> getHighscores(){
+    public static List<TimesData> getHighscores(){
         return Select.from(TimesData.class).orderBy("time").list();
+    }
+
+    public static List<TimesData> getHighscoresOf(String player){
+        return Select.from(TimesData.class)
+                        .where(Condition.prop("profile").eq(player))
+                        .orderBy("time")
+                        .list();
     }
 
 

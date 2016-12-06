@@ -5,12 +5,12 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -22,6 +22,8 @@ public class HighScoresActivity extends AppCompatActivity {
     private Button clearButton;
     private TextView title;
     private ListView listView;
+    private List<TimesData> timeList;
+    private boolean onePlayerDataShowing = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,25 +40,36 @@ public class HighScoresActivity extends AppCompatActivity {
         new AsyncTask<Void, Void, List<TimesData>>() {
             @Override
             protected List<TimesData> doInBackground(Void... voids) {
-                return TimesData.listAll(TimesData.class);
+                return TimesData.getHighscores();
             }
 
             @Override
             protected void onPostExecute(List<TimesData> times) {
                 super.onPostExecute(times);
+                timeList = times;
                 addToListView(times);
             }
         }.execute();
     }
 
-    private void addToListView(List<TimesData> times) {
-        //todo: format, sort
-        String[] values = new String[times.size()];
-        for (int i = 0; i < times.size(); i++){
-            values[i] = times.get(i).profile + " " + times.get(i).time;
-        }
+    private void addToListView(final List<TimesData> times) {
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, values);
+        ArrayAdapter<TimesData> adapter = new ArrayAdapter<TimesData> (this, R.layout.item_highscore, android.R.id.text1, times) {
+            @Override
+            public View getView(int position,
+                                View convertView, ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+
+                TextView text1 = (TextView) view.findViewById(android.R.id.text1);
+                TextView text2 = (TextView) view.findViewById(android.R.id.text2);
+
+                text1.setText(times.get(position).profile);
+                text2.setText(times.get(position).time);
+
+                return view;
+            }
+
+        };
         listView.setAdapter(adapter);
 
     }
@@ -66,19 +79,29 @@ public class HighScoresActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                int itemPosition = position;
-                String itemValue = (String) listView.getItemAtPosition(position);
-                Toast.makeText(getApplicationContext(),
-                        "Position :" + itemPosition + "  ListItem : " + itemValue, Toast.LENGTH_LONG)
-                        .show();
+                if (!onePlayerDataShowing){
+                    TimesData itemValue = timeList.get(position);
+                    List playersHighScores = TimesData.getHighscoresOf(itemValue.profile);
+                    listView.removeAllViewsInLayout();
+                    addToListView(playersHighScores);
+                    clearButton.setText(R.string.back);
+                    onePlayerDataShowing = true;
+                }
+
             }
         });
 
         clearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TimesData.deleteAll(TimesData.class);
-                listView.removeAllViewsInLayout();
+                if (onePlayerDataShowing){
+                    loadItemsInBackground();
+                    clearButton.setText(R.string.clear_highScores);
+                    onePlayerDataShowing = false;
+                } else {
+                    TimesData.deleteAll(TimesData.class);
+                    listView.removeAllViewsInLayout();
+                }
             }
         });
     }
