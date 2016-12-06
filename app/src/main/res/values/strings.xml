@@ -51,4 +51,5 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="back">Back</string>
+    <string name="your_best_was">"Your best was: "</string>
 </resources>

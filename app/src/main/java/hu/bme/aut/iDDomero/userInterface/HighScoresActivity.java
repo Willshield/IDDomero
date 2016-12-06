@@ -81,7 +81,7 @@ public class HighScoresActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (!onePlayerDataShowing){
                     TimesData itemValue = timeList.get(position);
-                    List playersHighScores = TimesData.getHighscoresOf(itemValue.profile);
+                    List<TimesData> playersHighScores = TimesData.getHighscoresOf(itemValue.profile);
                     listView.removeAllViewsInLayout();
                     addToListView(playersHighScores);
                     clearButton.setText(R.string.back);

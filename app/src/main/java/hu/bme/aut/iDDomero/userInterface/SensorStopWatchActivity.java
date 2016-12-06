@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 import hu.bme.aut.iDDomero.R;
@@ -61,8 +62,8 @@ public class SensorStopWatchActivity extends AppCompatActivity implements Sensor
     private Queue<SeismicDataPoint> seismicActivityBuffer;
 
     private String activeProfile;
-    private CharSequence bestTimeOfActivePlayer;
     private int highScoreSaveMode;
+    private boolean startStopWithButton;
 
 
     @Override
@@ -82,7 +83,8 @@ public class SensorStopWatchActivity extends AppCompatActivity implements Sensor
         drinker.setText(activeProfile + getString(R.string.drinks));
         bestTime.setText(getBestTimeOfActivePlayer());
         highScoreSaveMode = SettingsData.getInstance(getApplicationContext()).getManageMode();
-        //todo load best zime
+        bestTime.setText(getString(R.string.your_best_was) + getBestTimeOfActivePlayer());
+        startStopWithButton = SettingsData.getInstance(getApplicationContext()).isStartStopWithButton();
     }
 
     private void initSensor() {
@@ -97,8 +99,14 @@ public class SensorStopWatchActivity extends AppCompatActivity implements Sensor
             public void onClick(View v) {
                 if (!measureStopped) {
                     stopMeasure();
+                    if(startStopWithButton){
+                        handleHighScore();
+                    }
                 }else{
                     startMeasure();
+                    if(startStopWithButton){
+                        startTheStopWatch();
+                    }
                 }
             }
         });
@@ -208,7 +216,7 @@ public class SensorStopWatchActivity extends AppCompatActivity implements Sensor
         } else {
             askIfSaveHighScore();
         }
-        bestTime.setText(getBestTimeOfActivePlayer());
+        bestTime.setText(getString(R.string.your_best_was) + getBestTimeOfActivePlayer());
     }
 
     private void saveHighScore() {
@@ -272,7 +280,10 @@ public class SensorStopWatchActivity extends AppCompatActivity implements Sensor
     }
 
     public String getBestTimeOfActivePlayer() {
-        //todo
-        return "";
+        List<TimesData> playersHighScores = TimesData.getHighscoresOf(SettingsData.getInstance(getApplicationContext()).getActivePlayer());
+        if(playersHighScores.size() == 0){
+            return "- no times yet -";
+        }
+        return playersHighScores.get(0).time;
     }
 }
