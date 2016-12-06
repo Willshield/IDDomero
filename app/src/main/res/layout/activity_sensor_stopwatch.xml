@@ -37,6 +37,14 @@
             android:textColor="#0c0c0c"
             android:textSize="40sp" />
 
+        <TextView
+            android:gravity="center"
+            android:id="@+id/activeDrinkerText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            android:text="" />
 
         <TextView
             android:gravity="center"
@@ -59,6 +67,16 @@
             android:paddingRight="@dimen/button_margin"
             android:paddingTop="@dimen/button_margin"
             android:background="@color/colorForeground"/>
+
+        <TextView
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:id="@+id/bestTimeinfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            android:text="" />
 
     </LinearLayout>
 

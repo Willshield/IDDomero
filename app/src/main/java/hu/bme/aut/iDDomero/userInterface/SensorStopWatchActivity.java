@@ -19,6 +19,7 @@ import java.util.Queue;
 
 import hu.bme.aut.iDDomero.R;
 import hu.bme.aut.iDDomero.model.SeismicDataPoint;
+import hu.bme.aut.iDDomero.model.SettingsData;
 import hu.bme.aut.iDDomero.model.StopWatchEngine;
 
 
@@ -33,15 +34,15 @@ public class SensorStopWatchActivity extends AppCompatActivity implements Sensor
     private TextView textMaxMin;
     private TextView time;
     private TextView title;
+    private TextView drinker;
+    private TextView bestTime;
 
     //http://stackoverflow.com/questions/3733867/stop-watch-logic
     private StopWatchEngine stopWatch;
 
-
-
     private static int defaultCoolDown;
     private static int bufferSize;
-    private static float accuracyFactor = 3;
+    private float accuracyFactor = 3;
     private int coolDown;
     private MovementBarBuilder movementBarBuilder;
     private static final int BARS_COUNT = 34;
@@ -54,9 +55,10 @@ public class SensorStopWatchActivity extends AppCompatActivity implements Sensor
 
     private SensorManager sensorManager;
     private Sensor accelerometer;
-
     private Queue<SeismicDataPoint> seismicActivityBuffer;
 
+    private String activeProfile;
+    private CharSequence bestTimeOfActivePlayer;
 
 
     @Override
@@ -67,12 +69,20 @@ public class SensorStopWatchActivity extends AppCompatActivity implements Sensor
         initWidgets();
         initSensor();
         setOnClickListeners();
+        setActualSettings();
+    }
+
+    private void setActualSettings() {
+        activeProfile = SettingsData.getInstance(getApplicationContext()).getActivePlayer();
+        accuracyFactor = SettingsData.getInstance(getApplicationContext()).getSensitivity();
+        drinker.setText(activeProfile + getString(R.string.drinks));
+        bestTime.setText(getBestTimeOfActivePlayer());
     }
 
     private void initSensor() {
         this.sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         this.accelerometer = this.sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        this.seismicActivityBuffer = new LinkedList<SeismicDataPoint>();
+        this.seismicActivityBuffer = new LinkedList<>();
     }
 
     private void setOnClickListeners() {
@@ -95,6 +105,8 @@ public class SensorStopWatchActivity extends AppCompatActivity implements Sensor
         title.setTypeface(type);
         startBtn = (Button) findViewById(R.id.startbutton);
         startBtn.setTypeface(type);
+        drinker = (TextView) findViewById(R.id.activeDrinkerText);
+        bestTime = (TextView) findViewById(R.id.bestTimeinfo);
         textMaxMin = (TextView) findViewById(R.id.textmaxmin);
         time = (TextView) findViewById(R.id.timer);
         stopWatch = new StopWatchEngine(time);
@@ -113,18 +125,18 @@ public class SensorStopWatchActivity extends AppCompatActivity implements Sensor
     protected void stopMeasure(){
         measureStopped = true;
         clockRunnung = false;
-        startBtn.setText("Start");
+        startBtn.setText(R.string.action_start);
         stopWatch.stopClock();
         clockRunnung = false;
 
     }
     protected void startMeasure(){
         measureStopped = false;
-        startBtn.setText("Stop");
+        startBtn.setText(R.string.action_stop);
         min = Float.MAX_VALUE;
         max = 0;
         seismicActivityBuffer = new LinkedList<SeismicDataPoint>();
-        time.setText("00:00:00");
+        time.setText(R.string.start_time);
     }
 
 
@@ -156,7 +168,6 @@ public class SensorStopWatchActivity extends AppCompatActivity implements Sensor
         fetchNextSeismicData(event);
         float movement = getMovement();
         showMovement(movement);
-        //textMaxMin.setText("Movement: " + movement);
         checkStopWatchAction(movement);
 
     }
@@ -179,8 +190,13 @@ public class SensorStopWatchActivity extends AppCompatActivity implements Sensor
                 startTheStopWatch();
             } else {
                 stopTheStopWatch();
+                handleHighScore();
             }
         }
+    }
+
+    private void handleHighScore() {
+        //todo: save it if it need to be
     }
 
     private void startTheStopWatch() {
@@ -219,4 +235,8 @@ public class SensorStopWatchActivity extends AppCompatActivity implements Sensor
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
     }
 
+    public String getBestTimeOfActivePlayer() {
+        //todo
+        return "";
+    }
 }

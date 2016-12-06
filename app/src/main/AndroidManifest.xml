@@ -26,6 +26,7 @@
         <activity android:name=".userInterface.SensorStopWatchActivity" />
         <activity android:name=".userInterface.SettingsActivity" />
         <activity android:name=".userInterface.ProfileSelectorActivity" />
+        <activity android:name=".userInterface.HighScoresActivity" />
     </application>
 
 </manifest>

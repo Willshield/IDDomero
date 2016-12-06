@@ -39,30 +39,37 @@ public class MainMenuActivity extends AppCompatActivity {
         drink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(MainMenuActivity.this, SensorStopWatchActivity.class);
-                startActivity(intent);
+                startActivity(SensorStopWatchActivity.class);
             }
         });
 
         settings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(MainMenuActivity.this, SettingsActivity.class);
-                startActivity(intent);
+                startActivity(SettingsActivity.class);
             }
         });
 
         selectProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(MainMenuActivity.this, ProfileSelectorActivity.class);
-                startActivity(intent);
+                startActivity(ProfileSelectorActivity.class);
             }
         });
 
+        highscores.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(HighScoresActivity.class);
+            }
+        });
+
+    }
+
+    private void startActivity(Class nextActivityClass) {
+        Intent intent = new Intent();
+        intent.setClass(MainMenuActivity.this, nextActivityClass);
+        startActivity(intent);
     }
 
     private void initWidgets() {

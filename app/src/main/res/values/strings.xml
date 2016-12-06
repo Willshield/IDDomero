@@ -45,4 +45,6 @@
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
     <string name="long_username_alert">Username is maximum 30 characters long</string>
+    <string name="clear_highScores">Clear highscores</string>
+    <string name="drinks">" drinks"</string>
 </resources>

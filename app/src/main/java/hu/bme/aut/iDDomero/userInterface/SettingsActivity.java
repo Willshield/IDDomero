@@ -76,7 +76,6 @@ public class SettingsActivity extends AppCompatActivity {
         setDefaults.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: set defaults
                 setDefaultSensitivity();
                 setDefaultStartStop();
                 setDefaultMode();
